@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Annelys</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #000000;
+            --primary-gray: #1e1e1e;
+            --secondary-gray: #2a2a2a;
+            --text-color: #e0e0e0;
+            --accent-color: #ff8c00;
+            --nav-bg: rgba(40, 40, 40, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        h1, h2, h3 { font-weight: 700; }
+        p { font-weight: 300; line-height: 1.7; }
+
+        #flower-spectacle {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--dark-bg);
+            z-index: 1000;
+            overflow: hidden;
+            transition: opacity 1s ease-out;
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-burst 1.2s ease-out forwards;
+        }
+
+        @keyframes firework-burst {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: var(--transform-to) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .tulip {
+            position: absolute;
+            bottom: -200px;
+            width: 100px;
+            height: 200px;
+            transform: scale(0);
+            animation: grow-tulip 10s ease-in-out forwards;
+        }
+
+        @keyframes grow-tulip {
+            0% { transform: scale(0.8) translateY(0); bottom: -200px; }
+            50% { transform: scale(1) translateY(0); bottom: var(--bottom-pos); opacity: 1; }
+            90% { transform: scale(1) translateY(0); bottom: var(--bottom-pos); opacity: 1; }
+            100% { transform: scale(0.8) translateY(20px); bottom: var(--bottom-pos); opacity: 0; }
+        }
+
+        .tulip-stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 100px;
+            background: linear-gradient(to top, #006400, #32CD32);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .tulip-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 80px;
+        }
+
+        .tulip-petal {
+            position: absolute;
+            bottom: 0;
+            width: 35px;
+            height: 70px;
+            background: var(--flower-color);
+            border-radius: 150px 150px 0 0;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.3);
+        }
+
+        .petal-1 { left: 12.5px; z-index: 2; transform: rotate(-5deg); }
+        .petal-2 { left: 0; transform: rotate(-20deg) scale(0.9); }
+        .petal-3 { right: 0; transform: rotate(20deg) scale(0.9); }
+
+        .spectacle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 10px #000, 0 0 20px #000;
+            opacity: 0;
+            animation: fade-in-out 7s ease-in-out forwards;
+        }
+
+        @keyframes fade-in-out {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            15%, 85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        #final-message {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--dark-bg);
+            z-index: 999;
+            opacity: 0;
+            transform: scale(1.2);
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+        }
+
+        #final-message h1 {
+            color: var(--accent-color);
+            font-size: 3rem;
+            text-align: center;
+            padding: 1rem;
+            text-shadow: 0 0 15px var(--accent-color);
+        }
+
+        header, main, footer {
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+        }
+        header {
+            position: sticky; top: 0;
+            width: 100%; z-index: 100;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%; max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--text-color); }
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a { text-decoration: none; color: var(--text-color); font-weight: 400; transition: color 0.3s ease; }
+        nav a:hover, nav a:focus { color: var(--accent-color); }
+        section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+        section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        #hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .hero-content h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .hero-content p { font-size: 1.2rem; }
+        .qualities-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .quality-card { background-color: var(--primary-gray); padding: 2rem; border-radius: 8px; border: 1px solid var(--secondary-gray); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .quality-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
+        .quality-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent-color); }
+        .gallery-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; transition: transform 0.4s ease, opacity 0.4s ease; }
+        .gallery-item:hover img { transform: scale(1.05); opacity: 0.8; }
+        footer { text-align: center; padding: 2rem; background-color: var(--primary-gray); border-top: 1px solid var(--secondary-gray); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem !important; }
+            .spectacle-text { 
+                font-size: 1.5rem;
+                width: 90%;
+            }
+            #final-message h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            nav { flex-direction: column; gap: 0.5rem; padding: 1rem; }
+            nav ul { gap: 1.5rem; }
+            .tulip {
+                width: 70px;
+                height: 140px;
+            }
+            .qualities-container { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+            .gallery-container { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+            section { padding: 4rem 1rem; }
+            #hero { min-height: 60vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="flower-spectacle">
+        <div id="animated-texts"></div>
+    </div>
+    <div id="final-message"><h1>Te amo un mundo Annelys</h1></div>
+
+    <header>
+        <nav>
+            <div class="logo" style="color: #ff8c00;">A&L</div>
+            <ul>
+                <li><a href="#hero">Inicio</a></li>
+                <li><a href="#qualities">Tus Cualidades</a></li>
+                <li><a href="#gallery">Galería</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Para la persona más increíble</h1>
+                <p>Un pequeño rincón de la web dedicado a ti, mi Anne preciosa.</p>
+            </div>
+        </section>
+        <section id="qualities">
+            <h2>Algunos de los muchos pensamietos que tengo de ti...</h2>
+            <div class="qualities-container">
+                <div class="quality-card">
+                    <h3>Espero te gueste.</h3>
+                    <p>Eres una persona increible de verdad. Aún no puedo creer lo importante que te has vuelto para mi, pare serte sincero nunca me había sentido así por alguien más.</p>
+                </div>
+                <div class="quality-card">
+                    <h3>Me haces sentir...</h3>
+                    <p>Me haces sentir mucha seguridad, paz, felicidad y un monton de sentimientos que por donde los veas son buenos. En pocas palabras, me motivas. Es raro que no piense en nadie más que no seas tu a cada momento "memorable" que vivo, cada que pienso en mi futuro es a ti a quien veo junto a mi.</p>
+                </div>
+                <div class="quality-card">
+                    <h3>Gracias.</h3>
+                    <p>Gracias... de verdad, no me queda sino que agradecerte por todo lo bonito que me has trasmitido. Por darme animos, por hacerme feliz. Solo, gracias por hacerme seguir sin importar qué.</p>
+                </div>
+            </div>
+        </section>
+        <section id="gallery">
+            <h2>Mira lo bella que te ves mi amorcito :)</h2>
+            <div class="gallery-container">
+                <div class="gallery-item"><img src="WhatsApp Image 2025-09-29 at 00.34.049.jpeg" alt="Descripción de la imagen 1"></div>
+                <div class="gallery-item"><img src="WhatsApp Image 2025-09-29 at 00.34.047.jpeg" alt="Descripción de la imagen 2"></div>
+                <div class="gallery-item"><img src="WhatsApp Image 2025-09-29 at 00.34.050.jpeg" alt="Descripción de la imagen 3"></div>
+                <div class="gallery-item"><img src="WhatsApp Image 2025-09-29 at 00.34.03.jpeg" alt="Descripción de la imagen 5"></div>
+                           </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Hecho con mucho amor para ti.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const spectacle = document.getElementById('flower-spectacle');
+            const animatedTextsContainer = document.getElementById('animated-texts');
+            const finalMessage = document.getElementById('final-message');
+            const mainContent = document.querySelector('main');
+            const header = document.querySelector('header');
+            const footer = document.querySelector('footer');
+
+            const vibrantColors = ['#ff69b4', '#ff1493', '#dda0dd', '#8a2be2', '#ff7f50', '#ffd700', '#00fa9a', '#40e0d0', '#1e90ff'];
+
+            function createTulip() {
+                const tulip = document.createElement('div');
+                tulip.className = 'tulip';
+                
+                const x = Math.random() * (window.innerWidth - 100);
+                const bottom = Math.random() * 150;
+                const color1 = vibrantColors[Math.floor(Math.random() * vibrantColors.length)];
+                const gradient = `linear-gradient(to top, ${color}, #ffc0cb)`;
+
+                tulip.style.left = `${x}px`;
+                tulip.style.setProperty('--bottom-pos', `${bottom}px`);
+                tulip.style.setProperty('--flower-color', gradient);
+
+                tulip.innerHTML = `
+                    <div class="tulip-head">
+                        <div class="tulip-petal petal-2"></div>
+                        <div class="tulip-petal petal-3"></div>
+                        <div class="tulip-petal petal-1"></div>
+                    </div>
+                    <div class="tulip-stem"></div>
+                `;
+                
+                spectacle.appendChild(tulip);
+                setTimeout(() => tulip.remove(), 10000);
+            }
+
+            function showAnimatedText(text, delay) {
+                setTimeout(() => {
+                    const textElement = document.createElement('div');
+                    textElement.className = 'spectacle-text';
+                    textElement.innerHTML = text;
+                    animatedTextsContainer.innerHTML = '';
+                    animatedTextsContainer.appendChild(textElement);
+                }, delay);
+            }
+
+            showAnimatedText("Para la persona que ilumina mi mundo...", 1000);
+            showAnimatedText("Cada día a tu lado es un regalo...", 8000);
+            showAnimatedText("Y este es solo un pequeño reflejo de mi amor por ti...", 16000);
+
+            function createFirework() {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const color = vibrantColors[Math.floor(Math.random() * vibrantColors.length)];
+                const particleCount = 50;
+                const burstRadius = 120;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework-particle';
+                    
+                    const angle = (i / particleCount) * 360;
+                    const radians = angle * (Math.PI / 180);
+                    const randomRadius = Math.random() * burstRadius;
+                    const transformX = Math.cos(radians) * randomRadius;
+                    const transformY = Math.sin(radians) * randomRadius;
+
+                    particle.style.left = `${x}px`;
+                    particle.style.top = `${y}px`;
+                    particle.style.backgroundColor = color;
+                    particle.style.boxShadow = `0 0 8px ${color}`;
+                    particle.style.setProperty('--transform-to', `translate(${transformX}px, ${transformY}px)`);
+                    
+                    spectacle.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1200);
+                }
+            }
+
+            const tulipInterval = setInterval(createTulip, 1500);
+            const fireworkInterval = setInterval(createFirework, 500);
+            
+            const spectacleDuration = 24000;
+
+            setTimeout(() => {
+                clearInterval(tulipInterval);
+                clearInterval(fireworkInterval);
+            }, spectacleDuration - 4000);
+
+            setTimeout(() => {
+                spectacle.style.opacity = '0';
+                setTimeout(() => spectacle.remove(), 1000);
+            }, spectacleDuration);
+
+            setTimeout(() => {
+                finalMessage.style.opacity = '1';
+                finalMessage.style.transform = 'scale(1)';
+            }, spectacleDuration);
+
+            setTimeout(() => {
+                finalMessage.style.opacity = '0';
+                finalMessage.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    header.style.opacity = '1';
+                    mainContent.style.opacity = '1';
+                    footer.style.opacity = '1';
+                    document.body.style.overflowY = 'auto';
+                }, 50);
+            }, spectacleDuration + 4000);
+        });
+    </script>
+
+</body>
+</html>
